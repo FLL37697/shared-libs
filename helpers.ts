@@ -33,6 +33,49 @@ namespace radioactiveBrainstorm {
     // expand mode fails to work properly
     // Toggle logging
 
+    function renderScreen() {
+        brick.clearScreen()
+
+        for (let i = 0; i < _state.labels.length; i++) {
+            let selected = _state.pos === i;
+            const label = _state.labels[i];
+            brick.showString(`${selected ? '->' : '  '}${label}`, i + 1)
+        }
+    }
+
+    function onDownPressed() {
+        if (_state.pos + 1 < _state.labels.length) {
+            _state.pos = _state.pos + 1;
+        }
+        renderScreen();
+    }
+
+    function onUpPressed() {
+        if (_state.pos - 1 >= 0) {
+            _state.pos = _state.pos - 1;
+        }
+        renderScreen();
+    }
+
+    function onEnterPressed() {
+        brick.showImage(images.objectsLightning);
+        _state.cmds[_state.pos]();
+        renderScreen();
+    }
+
+    // Event handlers
+    brick.buttonDown.onEvent(ButtonEvent.Pressed, function () {
+        onDownPressed();
+    })
+
+    brick.buttonUp.onEvent(ButtonEvent.Pressed, function () {
+        onUpPressed();
+    })
+
+    brick.buttonEnter.onEvent(ButtonEvent.Pressed, function () {
+        onEnterPressed();
+    })
+
     /**
     * Move motor until it stalls
     * @param direction DOWN or UP
@@ -80,47 +123,4 @@ namespace radioactiveBrainstorm {
             lastArmPos = armPos
         }
     }
-
-    function renderScreen() {
-        brick.clearScreen()
-
-        for (let i = 0; i < _state.labels.length; i++) {
-            let selected = _state.pos === i;
-            const label = _state.labels[i];
-            brick.showString(`${selected ? '->' : '  '}${label}`, i + 1)
-        }
-    }
-
-    function onDownPressed() {
-        if (_state.pos + 1 < _state.labels.length) {
-            _state.pos = _state.pos + 1;
-        }
-        renderScreen();
-    }
-
-    function onUpPressed() {
-        if (_state.pos - 1 >= 0) {
-            _state.pos = _state.pos - 1;
-        }
-        renderScreen();
-    }
-
-    function onEnterPressed() {
-        brick.showImage(images.objectsLightning);
-        _state.cmds[_state.pos]();
-        renderScreen();
-    }
-
-    // Event handlers
-    brick.buttonDown.onEvent(ButtonEvent.Pressed, function () {
-        onDownPressed();
-    })
-
-    brick.buttonUp.onEvent(ButtonEvent.Pressed, function () {
-        onUpPressed();
-    })
-
-    brick.buttonEnter.onEvent(ButtonEvent.Pressed, function () {
-        onEnterPressed();
-    })
 }
